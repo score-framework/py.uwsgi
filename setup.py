@@ -35,7 +35,7 @@ with open(os.path.join(here, 'README.rst')) as f:
 
 setup(
     name='score.uwsgi',
-    version='0.1',
+    version='0.1.1',
     description='Management of uwsgi processes for The SCORE Framework',
     long_description=README,
     author='strg.at',
