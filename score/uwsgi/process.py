@@ -173,6 +173,7 @@ class Overlord(UwsgiProcess):
         self.folder = os.path.join(self.conf.rootdir, self.name)
         self.fifo = os.path.join(self.folder, 'overlord.fifo')
         self.logfile = os.path.join(self.folder, 'overlord.log')
+        self.pidfile = os.path.join(self.folder, 'overlord.pid')
         self.stats_socket = os.path.join(self.folder, 'overlord.stats.sock')
         self.inifile = os.path.join(self.folder, 'uwsgi.ini')
         self.cmdline = ["uwsgi", "--ini", "%s/uwsgi.ini:overlord" % self.name]
@@ -185,6 +186,7 @@ class Overlord(UwsgiProcess):
         section = ini['overlord']
         section['master'] = True
         section['daemonize'] = self.logfile
+        section['pidfile'] = self.pidfile
         section['stats-server'] = self.stats_socket
         section['plugin'] = 'zergpool'
         section['logdate'] = True
@@ -237,6 +239,7 @@ class Zergling(UwsgiProcess):
         self.folder = self.overlord.folder
         self.fifo = os.path.join(self.folder, 'zergling-%s.fifo' % name)
         self.logfile = os.path.join(self.folder, 'zergling-%s.log' % name)
+        self.pidfile = os.path.join(self.folder, 'zergling-%s.pid' % name)
         self.stats_socket = os.path.join(self.folder,
                                          'zergling-%s.stats.sock' % name)
         self.startup_file = os.path.join(self.folder,
@@ -261,6 +264,7 @@ class Zergling(UwsgiProcess):
             section['virtualenv'] = virtualenv
         section['zerg'] = os.path.join(self.folder, 'zerg.socket')
         section['daemonize'] = self.logfile
+        section['pidfile'] = self.pidfile
         section['logdate'] = True
         section['stats-server'] = self.stats_socket
         section['master-fifo'] = self.fifo
