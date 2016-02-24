@@ -137,14 +137,16 @@ def pause_zergling(ctx, zergling):
         raise click.ClickException('That zergling is already paused')
 
 
-@main.command('stats-zergling')
+@main.command('stats')
 @click.argument('zergling')
 @click.pass_context
 def stats_zergling(ctx, zergling):
     overlord, zergling = parse_alias(zergling)
     try:
-        overlord = ctx.obj.uwsgi.Overlord(overlord)
-        stats = overlord.zergling(zergling).read_stats()
+        process = ctx.obj.uwsgi.Overlord(overlord)
+        if zergling:
+            process = overlord.zergling(zergling)
+        stats = process.read_stats()
         print(json.dumps(stats, sort_keys=True, indent=4))
     except score.uwsgi.NoSuchZergling:
         raise click.ClickException('No zergling with that name.')
